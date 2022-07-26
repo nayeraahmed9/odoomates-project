@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_hospital_patient_form" model="ir.ui.view">
+        <field name="name">hospital.patient.form</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" string="Patient Name"/>
+                            <field name="date_of_birth"/>
+                            <field name="age"/>
+                            <field name="appointment_id"/>
+                        </group>
+                         <group>
+                             <field name="ref"/>
+                            <field name="gender"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                 <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids" groups="base.group_user"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="view_hospital_patient_tree" model="ir.ui.view">
+        <field name="name">hospital.patient.tree</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Patient Name"/>
+                <field name="date_of_birth" string="date of Birth"/>
+                <field name="age" string="Age"/>
+                <field name="gender" string="Gender"/>
+                <field name="ref" string="Reference"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_hospital_patient_search" model="ir.ui.view">
+        <field name="name">hospital.patient.search</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" filter_domain="['|', ('name', 'ilike',self),('ref','ilike',self)]"/>
+                <separator string="TEST"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <field name="ref"/>
+                <filter name="filter_female" string="Female" domain="[('gender','=','female')]"/>
+                <filter name="filter_male" string="Male" domain="[('gender','=','male')]"/>
+<!--                <separator string="TEST"/>-->
+<!--                <filter name="filter_kids" string="Kids" domain="[('age','&lt;=','5')]"/>-->
+                <separator string="TEST"/>
+                <filter name="filter_Archieved" string="Archieved" domain="[('active','=',False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Gender" name="group_by_gender" context="{'group_by':'gender'}"/>
+                </group>
+                <searchpanel>
+                    <field name="gender" icon="fa-users" select="multi" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_hospital_patient">
+        <field name="name">Patients</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="context">{'search_default_filter_male':1, 'search_default_group_by_gender':1}</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help"  type="html">
+            <p class="o_view_nocontent_smiling_face">Creat The First Patient</p>
+        </field>
+    </record>
+    <menuitem id="menu_patient"
+              name="Patient"
+              parent="menu_hospital_master"
+              action="action_hospital_patient"
+              sequence="0"/>
+</odoo>
+
