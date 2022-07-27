@@ -5,10 +5,15 @@
         <field name="model">hospital.appointment</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_in_consultation" string="In Consultation" type="object" states="draft" data-hotkey="x" class="oe_highlight"/>
+                    <button name="action_done" string="Mark As Done" type="object" states="in_consultation" data-hotkey="v" class="oe_highlight"/>
+                    <button name="action_cancelled" string="Cancelled" type="object" states="draft,in_consultation"/>
+                    <button name="action_draft" string="Reset to Draft" type="object" states="cancelled"/>
+                    <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,in_consultation,done" />
+<!--                    options="{'clickable': '1'}"-->
+               </header>
                 <sheet>
-                    <header>
-                        <field name="state" widget="statusbar" nolabel="1" options="{'clickable': '1'}"/>
-                   </header>
                     <div class="oe_title">
                         <h1>
                             <field name="priority" widget="priority" class="mr-3"/>
@@ -18,20 +23,44 @@
                         <group>
                             <field name="patient_id"/>
                             <field name="gender"/>
-                            <field name="appointment_time"/>
+                            <field name="doctor_id" widget="many2one_avatar_user"/>
+                            <field name="appointment_time" default_focus="1"/>
                             <field name="ref"/>
                         </group>
                         <group>
-                            <field name="booking_date"/>
+                            <field name="hide_sales_price" groups="base.group_no_one"/>
+                            <field name="booking_date" help=""/>
+                            <field name="booking_date" help="Date of booking"/>
+                            <button name="action_test" string="Object Button" type="object" class="oe_highlight"/>
+                            <button name="%(om_hospital.action_hospital_patient)d"
+                                    help="on clicking this you will be redirected your patient record"
+                                    string="Action Button" confirm="Are you sure to open the patient action"
+                                    type="action" class="oe_highlight"/>
                         </group>
                     </group>
                     <notebook>
                         <page string="Prescription">
                             <group>
-                                <field name="prescription" placeholder="Enter your prescription"/>
+                                <field name="prescription" placeholder="Enter your prescription" options="{'collaborative':True,'resizable':True}"/>
                             </group>
                         </page>
-                        <page string="Pharmacy">
+                        <page string="Pharmacy" name="pharmacy">
+                            <field name="pharmacy_line_ids">
+                                <tree editable="top">
+                                    <field name="product_id"/>
+                                    <field name="unit_price"
+                                           attrs="{'column_invisible': [('parent.hide_sales_price', '=', True)]}"/>
+                                    <field name="qty"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="product_id"/>
+                                        <field name="unit_price"
+                                               attrs="{'column_invisible': [('parent.hide_sales_price', '=', True)]}"/>
+                                        <field name="qty"/>
+                                    </group>
+                                </form>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
@@ -47,10 +76,17 @@
         <field name="name">hospital.appointment.tree</field>
         <field name="model">hospital.appointment</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree decoration-success="state == 'done'" decoration-danger="state == 'cancelled'" decoration-info="state == 'draft'" decoration-warning="state == 'in_consultation'" sample="1">
                 <field name="patient_id"/>
-                <field name="appointment_time"/>
+                <field name="appointment_time" optional="show"/>
+                <field name="doctor_id" widget="many2one_avatar_user"/>
                 <field name="booking_date"/>
+                <field name="activity_ids" widget="list_activity"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state == 'draft'"
+                       decoration-danger="state == 'cancelled'"
+                       decoration-warning="state == 'in_consultation'"/>
             </tree>
         </field>
     </record>
@@ -68,7 +104,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="context">{}</field>
         <field name="domain">[]</field>
-        <field name="view_mode">form,tree</field>
+        <field name="view_mode">tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Creat The First appointment</p>
         </field>

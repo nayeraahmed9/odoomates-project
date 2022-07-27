@@ -6,8 +6,10 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <field name="image" widget="Image" class="oe_avatar"/>
                     <group>
                         <group>
+<!--                            <field name="image" widget="Image" class="oe_avatar"/>-->
                             <field name="name" string="Patient Name"/>
                             <field name="date_of_birth"/>
                             <field name="age"/>

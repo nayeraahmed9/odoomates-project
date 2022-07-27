@@ -5,6 +5,7 @@ class HospitalPatient(models.Model):
     _inherit=['mail.thread', 'mail.activity.mixin']
     _description="Hospital Patient"
 
+    image=fields.Image(string="Image")
     name= fields.Char(string='Name', required=False,tracking=True)
     ref= fields.Char(string='Reference')
     date_of_birth= fields.Date(string="Birth Of Date")

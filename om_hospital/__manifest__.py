@@ -6,7 +6,7 @@
     'sequence': -100,
     'summary': 'hospital management system',
     'description': """This module contains all the common features of hospital management system.""",
-    'depends': ['mail'],
+    'depends': ['mail','product'],
     'data': [
         'security/ir.model.access.csv',
         'views/menu.xml',
