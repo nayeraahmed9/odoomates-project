@@ -11,6 +11,28 @@
 
     <menuitem id="menu_appointment_master"
               name="Appointments"
-              parent="menu_hospital_root" sequence="20"/>
+              parent="menu_hospital_root"
+              sequence="20"/>
 
+    <menuitem id="menu_configuration"
+              name="Configurations"
+              parent="menu_hospital_root"
+              sequence="100"/>
+
+    <menuitem id="menu_cancel_appointment"
+              name="Cancellation"
+              parent="menu_appointment_master"
+              action="action_cancel_appointment"
+              sequence="20"/>
+
+    <menuitem id="menu_reporting"
+                name="Reporting"
+                 parent="menu_hospital_root"
+                 sequence="40"/>
+
+    <menuitem id="menu_Appointment_report"
+              name="Appointments"
+              action="om_hospital.action_report_appointment"
+              parent="menu_reporting"
+              sequence="10"/>
 </odoo>
